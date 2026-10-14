@@ -1,0 +1,39 @@
+import React, { useState } from "react";
+
+function App() {
+  const [dark, setDark] = useState(false);
+
+  const pageStyle = {
+    backgroundColor: dark ? "#222" : "#fff",
+    color: dark ? "#fff" : "#222",
+    minHeight: "100vh",
+    textAlign: "center",
+    padding: "40px",
+    transition: "0.3s"
+  };
+
+  return (
+    <div style={pageStyle}>
+      <h1>Dark / Light Theme</h1>
+
+      <p>
+        This application allows you to switch between dark mode and light mode.
+      </p>
+
+      <button
+        onClick={() => setDark(!dark)}
+        style={{
+          padding: "10px 20px",
+          cursor: "pointer",
+          borderRadius: "5px"
+        }}
+      >
+        {dark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+      </button>
+
+      <h2>{dark ? "Dark Mode Enabled" : "Light Mode Enabled"}</h2>
+    </div>
+  );
+}
+
+export default App;

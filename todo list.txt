@@ -1,0 +1,59 @@
+import React, { useState } from "react";
+
+function App() {
+  const [tasks, setTasks] = useState([]);
+  const [task, setTask] = useState("");
+  const [editId, setEditId] = useState(null);
+
+  function saveTask() {
+    if (task.trim() === "") return;
+
+    if (editId !== null) {
+      setTasks(
+        tasks.map((t) =>
+          t.id === editId ? { ...t, name: task } : t
+        )
+      );
+      setEditId(null);
+    } else {
+      setTasks([...tasks, { id: Date.now(), name: task }]);
+    }
+
+    setTask("");
+  }
+
+  function editTask(t) {
+    setTask(t.name);
+    setEditId(t.id);
+  }
+
+  function deleteTask(id) {
+    setTasks(tasks.filter((t) => t.id !== id));
+  }
+
+  return (
+    <div style={{ textAlign: "center", margin: "50px" }}>
+      <h1>React To-Do List</h1>
+
+      <input
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        placeholder="Enter a task"
+      />
+
+      <button onClick={saveTask}>
+        {editId !== null ? "Update" : "Add"}
+      </button>
+
+      {tasks.map((t) => (
+        <div key={t.id} style={{ margin: "15px" }}>
+          {t.name}{" "}
+          <button onClick={() => editTask(t)}>Edit</button>{" "}
+          <button onClick={() => deleteTask(t.id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default App;

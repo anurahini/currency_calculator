@@ -1,0 +1,69 @@
+import React, { useState } from "react";
+
+function App() {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [search, setSearch] = useState("");
+  const [contacts, setContacts] = useState([]);
+
+  function addContact() {
+    if (name.trim() === "" || phone.trim() === "") return;
+
+    setContacts([
+      ...contacts,
+      { id: Date.now(), name: name, phone: phone }
+    ]);
+
+    setName("");
+    setPhone("");
+  }
+
+  function deleteContact(id) {
+    setContacts(contacts.filter((c) => c.id !== id));
+  }
+
+  const filteredContacts = contacts.filter(
+    (c) =>
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.phone.includes(search)
+  );
+
+  return (
+    <div style={{ textAlign: "center", margin: "40px" }}>
+      <h1>Contact Book</h1>
+
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Contact name"
+      />
+      <br /><br />
+
+      <input
+        type="tel"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        placeholder="Phone number"
+      />
+      <br /><br />
+
+      <button onClick={addContact}>Add Contact</button>
+
+      <h3>Search Contacts</h3>
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search name or phone"
+      />
+
+      {filteredContacts.map((c) => (
+        <div key={c.id} style={{ margin: "15px" }}>
+          <b>{c.name}</b> - {c.phone}
+          <button onClick={() => deleteContact(c.id)}> Delete</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default App;

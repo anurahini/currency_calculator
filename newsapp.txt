@@ -1,0 +1,66 @@
+import React, { useState } from "react";
+
+function App() {
+  const [search, setSearch] = useState("");
+
+  const news = [
+    {
+      title: "Artificial Intelligence",
+      description: "AI is transforming technology and education.",
+      category: "Technology"
+    },
+    {
+      title: "Climate Change",
+      description: "Scientists study ways to protect the environment.",
+      category: "Environment"
+    },
+    {
+      title: "Space Exploration",
+      description: "New missions explore planets and distant galaxies.",
+      category: "Science"
+    },
+    {
+      title: "Sports Updates",
+      description: "Latest updates from the world of sports.",
+      category: "Sports"
+    }
+  ];
+
+  const filteredNews = news.filter(
+    (n) =>
+      n.title.toLowerCase().includes(search.toLowerCase()) ||
+      n.category.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div style={{ textAlign: "center", margin: "40px" }}>
+      <h1>News App</h1>
+
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search news"
+      />
+
+      {filteredNews.map((n, index) => (
+        <div
+          key={index}
+          style={{
+            border: "1px solid gray",
+            padding: "15px",
+            margin: "15px auto",
+            maxWidth: "400px"
+          }}
+        >
+          <h2>{n.title}</h2>
+          <p>{n.description}</p>
+          <b>{n.category}</b>
+        </div>
+      ))}
+
+      {filteredNews.length === 0 && <p>No news found.</p>}
+    </div>
+  );
+}
+
+export default App;

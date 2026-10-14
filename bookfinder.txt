@@ -1,0 +1,73 @@
+import React, { useState } from "react";
+
+function App() {
+  const [search, setSearch] = useState("");
+  const [books, setBooks] = useState([]);
+  const [error, setError] = useState("");
+
+  async function findBooks() {
+    if (!search.trim()) return;
+
+    setBooks([]);
+    setError("");
+
+    try {
+      const response = await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(search)}`
+      );
+
+      if (!response.ok) throw new Error();
+
+      const data = await response.json();
+      setBooks(data.items || []);
+
+      if (!data.items || data.items.length === 0) {
+        setError("No books found");
+      }
+    } catch {
+      setError("Unable to fetch books. Check your internet.");
+    }
+  }
+
+  return (
+    <div style={{ textAlign: "center", margin: "30px" }}>
+      <h1>Book Finder</h1>
+
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Enter book title or author"
+      />
+
+      <button onClick={findBooks}>Search</button>
+
+      <p>{error}</p>
+
+      {books.map((book) => {
+        const info = book.volumeInfo;
+
+        return (
+          <div
+            key={book.id}
+            style={{ border: "1px solid gray", margin: "20px auto", padding: "15px", maxWidth: "400px" }}
+          >
+            <h2>{info.title}</h2>
+
+            {info.imageLinks && (
+              <img src={info.imageLinks.thumbnail} alt={info.title} />
+            )}
+
+            <p>Author: {info.authors?.join(", ") || "Unknown"}</p>
+            <p>{info.description?.slice(0, 150) || "No description available"}</p>
+
+            <a href={info.infoLink} target="_blank" rel="noreferrer">
+              View Book
+            </a>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export default App;

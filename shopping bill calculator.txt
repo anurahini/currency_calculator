@@ -1,0 +1,97 @@
+import React, { useState } from "react";
+
+function App() {
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [items, setItems] = useState([]);
+
+  function addItem() {
+    if (
+      name.trim() === "" ||
+      price === "" ||
+      quantity === "" ||
+      Number(price) <= 0 ||
+      Number(quantity) <= 0
+    ) {
+      return;
+    }
+
+    setItems([
+      ...items,
+      {
+        id: Date.now(),
+        name: name,
+        price: Number(price),
+        quantity: Number(quantity)
+      }
+    ]);
+
+    setName("");
+    setPrice("");
+    setQuantity("");
+  }
+
+  function removeItem(id) {
+    setItems(items.filter((item) => item.id !== id));
+  }
+
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  return (
+    <div style={{ textAlign: "center", margin: "40px" }}>
+      <h1>Online Shopping Bill Calculator</h1>
+
+      <input
+        placeholder="Product name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        type="number"
+        placeholder="Price"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        type="number"
+        placeholder="Quantity"
+        value={quantity}
+        onChange={(e) => setQuantity(e.target.value)}
+      />
+
+      <br /><br />
+
+      <button onClick={addItem}>Add Item</button>
+
+      <h2>Shopping Bill</h2>
+
+      {items.map((item) => (
+        <div key={item.id} style={{ margin: "15px" }}>
+          {item.name} - ₹{item.price} × {item.quantity}
+          = ₹{(item.price * item.quantity).toFixed(2)}
+
+          <button
+            onClick={() => removeItem(item.id)}
+            style={{ marginLeft: "10px" }}
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+
+      <h2>Total Bill: ₹{total.toFixed(2)}</h2>
+    </div>
+  );
+}
+
+export default App;

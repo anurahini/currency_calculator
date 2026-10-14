@@ -1,0 +1,28 @@
+import React, { useState } from "react";
+
+function App() {
+  const [date, setDate] = useState("");
+
+  return (
+    <div style={{ textAlign: "center", margin: "50px" }}>
+      <h1>Calendar Picker</h1>
+
+      <h3>Select a Date</h3>
+
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
+
+      {date && (
+        <div>
+          <h2>Selected Date</h2>
+          <p>{new Date(date + "T00:00:00").toDateString()}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;

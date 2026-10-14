@@ -1,0 +1,73 @@
+import React, { useState } from "react";
+
+function App() {
+  const [notes, setNotes] = useState([]);
+  const [note, setNote] = useState("");
+  const [editId, setEditId] = useState(null);
+
+  function saveNote() {
+    if (note.trim() === "") return;
+
+    if (editId !== null) {
+      setNotes(
+        notes.map((n) =>
+          n.id === editId ? { ...n, text: note } : n
+        )
+      );
+      setEditId(null);
+    } else {
+      setNotes([...notes, { id: Date.now(), text: note }]);
+    }
+
+    setNote("");
+  }
+
+  function editNote(n) {
+    setNote(n.text);
+    setEditId(n.id);
+  }
+
+  function deleteNote(id) {
+    setNotes(notes.filter((n) => n.id !== id));
+  }
+
+  return (
+    <div style={{ textAlign: "center", margin: "40px" }}>
+      <h1>React Notes App</h1>
+
+      <textarea
+        rows="4"
+        cols="30"
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        placeholder="Write your note here..."
+      />
+      <br /><br />
+
+      <button onClick={saveNote}>
+        {editId !== null ? "Update Note" : "Add Note"}
+      </button>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "15px", marginTop: "25px" }}>
+        {notes.map((n) => (
+          <div
+            key={n.id}
+            style={{
+              background: "lightyellow",
+              padding: "20px",
+              width: "180px",
+              border: "1px solid gray",
+              overflowWrap: "anywhere"
+            }}
+          >
+            <p>{n.text}</p>
+            <button onClick={() => editNote(n)}>Edit</button>{" "}
+            <button onClick={() => deleteNote(n.id)}>Delete</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;

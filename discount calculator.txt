@@ -1,0 +1,72 @@
+import React, { useState } from "react";
+
+function App() {
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [result, setResult] = useState(null);
+
+  function calculateDiscount() {
+    const p = Number(price);
+    const d = Number(discount);
+
+    if (
+      price === "" ||
+      discount === "" ||
+      p < 0 ||
+      d < 0 ||
+      d > 100
+    ) {
+      setResult("Enter a valid price and discount (0–100%)");
+      return;
+    }
+
+    const saved = (p * d) / 100;
+    const finalPrice = p - saved;
+
+    setResult({
+      saved: saved.toFixed(2),
+      finalPrice: finalPrice.toFixed(2)
+    });
+  }
+
+  return (
+    <div style={{ textAlign: "center", margin: "50px" }}>
+      <h1>Discount Calculator</h1>
+
+      <input
+        type="number"
+        placeholder="Original price"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        type="number"
+        placeholder="Discount percentage"
+        value={discount}
+        onChange={(e) => setDiscount(e.target.value)}
+      />
+
+      <br /><br />
+
+      <button onClick={calculateDiscount}>
+        Calculate
+      </button>
+
+      {result !== null && (
+        typeof result === "string" ? (
+          <p>{result}</p>
+        ) : (
+          <div>
+            <h3>Discount Amount: ₹{result.saved}</h3>
+            <h2>Final Price: ₹{result.finalPrice}</h2>
+          </div>
+        )
+      )}
+    </div>
+  );
+}
+
+export default App;
